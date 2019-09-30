@@ -26,7 +26,7 @@ int main(int argc,char *argv[])
     
     for (a = 1; a < argc;a++)
     {
-        if (strcmp(argv[a],"-disable_validate") == 0)
+        if (strcmp(argv[a],"-disable_validate") == 0 || strcmp(argv[a],"-dv") == 0 || strcmp(argv[a],"-stfu") == 0 )
         {
             validate = 0;
         }
@@ -45,20 +45,34 @@ int main(int argc,char *argv[])
     
     // main game loop
     slog("gf3d main loop begin");
-    model = gf3d_model_load("dino");
+    model = gf3d_model_load("mouse");
     gfc_matrix_identity(modelMat);
-    model2 = gf3d_model_load("dino");
+    model2 = gf3d_model_load("vulture");
     gfc_matrix_identity(modelMat2);
     gfc_matrix_make_translation(
             modelMat2,
             vector3d(10,0,0)
         );
+    gfc_matrix_rotate(
+            modelMat,
+            modelMat,
+            -1.0,
+            vector3d(1,0,0));
+        gfc_matrix_rotate(
+            modelMat2,
+            modelMat2,
+            1.0,
+            vector3d(1,0,0));
+        gfc_matrix_rotate(
+            modelMat2,
+            modelMat2,
+            1.0,
+            vector3d(0,1,0));
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
         keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
         //update game things here
-        
         gf3d_vgraphics_rotate_camera(0.001);
         gfc_matrix_rotate(
             modelMat,
