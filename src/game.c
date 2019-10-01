@@ -20,10 +20,6 @@ int main(int argc,char *argv[])
     const Uint8 * keys;
     Uint32 bufferFrame = 0;
     VkCommandBuffer commandBuffer;
-    Model *model;
-    Matrix4 modelMat;
-    Model *model2;
-    Matrix4 modelMat2;
     
     for (a = 1; a < argc;a++)
     {
@@ -49,33 +45,24 @@ int main(int argc,char *argv[])
     
     gf3d_entity_manager_init(1024);
 
-    Entity *mouse = gf3d_entity_new();
-    Entity *vulture = gf3d_entity_new();
-
-
+    Model *model;
+    Matrix4 modelMat;
+    Model *model2;
+    Matrix4 modelMat2;
     model = gf3d_model_load("mouse");
+    
     gfc_matrix_identity(modelMat);
     model2 = gf3d_model_load("vulture");
     gfc_matrix_identity(modelMat2);
-    gfc_matrix_make_translation(
-            modelMat2,
-            vector3d(10,0,0)
-        );
-    gfc_matrix_rotate(
-            modelMat,
-            modelMat,
-            -1.0,
-            vector3d(1,0,0));
-        gfc_matrix_rotate(
-            modelMat2,
-            modelMat2,
-            1.0,
-            vector3d(1,0,0));
-        gfc_matrix_rotate(
-            modelMat2,
-            modelMat2,
-            1.0,
-            vector3d(0,1,0));
+
+    Entity *mouse = gf3d_entity_new();
+    mouse->model = model;
+    mouse->position = vector3d(0,0,0);
+    mouse->rotation = vector3d(0,0,0);
+    mouse->scale = vector3d(0,0,0);
+
+    Entity *vulture = gf3d_entity_new();
+
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
@@ -87,11 +74,6 @@ int main(int argc,char *argv[])
             modelMat,
             0.002,
             vector3d(1,0,0));
-        gfc_matrix_rotate(
-            modelMat2,
-            modelMat2,
-            0.002,
-            vector3d(0,0,1));
 
         // configure render command for graphics command pool
         // for each mesh, get a command and configure it from the pool
@@ -101,7 +83,7 @@ int main(int argc,char *argv[])
 
                 gf3d_model_draw(model,bufferFrame,commandBuffer,modelMat);
                 gf3d_model_draw(model2,bufferFrame,commandBuffer,modelMat2);
-                
+
             gf3d_command_rendering_end(commandBuffer);
             
         gf3d_vgraphics_render_end(bufferFrame);

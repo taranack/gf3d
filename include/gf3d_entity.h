@@ -14,6 +14,7 @@ typedef struct Entity_S
 {
     Uint8           _inuse;         /**<flag to keep track if this isntance is in use and should not be reassigned*/
     Model          *model;          /**<the 3d model for this entity*/
+    Matrix4        modelMat;        /**<the model matrix for this entity*/
     Vector3D       position;       /**<position of the entity in 3d space*/
     Vector3D       velocity;       /**<velocity of the entity in 3d space*/
     Vector3D       acceleration;   /**<acceleration of the entity in 3d space*/

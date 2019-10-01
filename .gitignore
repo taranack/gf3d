@@ -2,7 +2,9 @@
 *.d
 
 #fuck clion
-.idea
+build/
+.idea/
+cmake-build-debug/
 
 # Object files
 *.o
