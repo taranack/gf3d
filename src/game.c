@@ -10,6 +10,7 @@
 #include "gf3d_model.h"
 #include "gf3d_camera.h"
 #include "gf3d_texture.h"
+#include "gf3d_entity.h"
 
 int main(int argc,char *argv[])
 {
@@ -26,7 +27,7 @@ int main(int argc,char *argv[])
     
     for (a = 1; a < argc;a++)
     {
-        if (strcmp(argv[a],"-disable_validate") == 0 || strcmp(argv[a],"-dv") == 0 || strcmp(argv[a],"-stfu") == 0 )
+        if (strcmp(argv[a],"-disable_validate") == 0 || strcmp(argv[a],"-dv") == 0 || strcmp(argv[a],"-stfu") == 0 || strcmp(argv[a],"-n") == 0 )
         {
             validate = 0;
         }
@@ -45,6 +46,13 @@ int main(int argc,char *argv[])
     
     // main game loop
     slog("gf3d main loop begin");
+    
+    gf3d_entity_manager_init(1024);
+
+    Entity *mouse = gf3d_entity_new();
+    Entity *vulture = gf3d_entity_new();
+
+
     model = gf3d_model_load("mouse");
     gfc_matrix_identity(modelMat);
     model2 = gf3d_model_load("vulture");
