@@ -37,29 +37,20 @@ int main(int argc,char *argv[])
         700,                    //screen height
         vector4d(0.51,0.75,1,1),//background color
         0,                      //fullscreen
-        validate                //validation
+        validate                          //validation
     );
     
     // main game loop
     slog("gf3d main loop begin");
     
-    gf3d_entity_manager_init(1024);
-
-    Model *model;
-    Matrix4 modelMat;
-    Model *model2;
-    Matrix4 modelMat2;
-    model = gf3d_model_load("mouse");
-    
-    gfc_matrix_identity(modelMat);
-    model2 = gf3d_model_load("vulture");
-    gfc_matrix_identity(modelMat2);
+    gf3d_entity_manager_init(64);
 
     Entity *mouse = gf3d_entity_new();
-    mouse->model = model;
+    mouse->model = gf3d_model_load("mouse");
+    gfc_matrix_identity(mouse->modelMat);
     mouse->position = vector3d(0,0,0);
     mouse->rotation = vector3d(0,0,0);
-    mouse->scale = vector3d(0,0,0);
+    mouse->scale = vector3d(1,1,1);
 
     Entity *vulture = gf3d_entity_new();
 
@@ -69,11 +60,7 @@ int main(int argc,char *argv[])
         keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
         //update game things here
         gf3d_vgraphics_rotate_camera(0.001);
-        gfc_matrix_rotate(
-            modelMat,
-            modelMat,
-            0.002,
-            vector3d(1,0,0));
+        gf3d_entity_rotate(mouse, .002, vector3d(1,0,0));
 
         // configure render command for graphics command pool
         // for each mesh, get a command and configure it from the pool
@@ -81,8 +68,7 @@ int main(int argc,char *argv[])
         gf3d_pipeline_reset_frame(gf3d_vgraphics_get_graphics_pipeline(),bufferFrame);
             commandBuffer = gf3d_command_rendering_begin(bufferFrame);
 
-                gf3d_model_draw(model,bufferFrame,commandBuffer,modelMat);
-                gf3d_model_draw(model2,bufferFrame,commandBuffer,modelMat2);
+                gf3d_entity_manager_draw_all(bufferFrame, commandBuffer);
 
             gf3d_command_rendering_end(commandBuffer);
             

@@ -44,13 +44,26 @@ void gf3d_entity_manager_init(Uint32 entity_max);
  * @brief get an empty entity from the system
  * @return NULL on out of space or a pointer to an entity otherwise
  */
+
+
+/**
+ * @brief draw every entity that is in use
+ * @param bufferFrame
+ * @param commandBuffer
+ */
+void gf3d_entity_manager_draw_all(Uint32 bufferFrame, VkCommandBuffer commandBuffer);
+
 Entity *gf3d_entity_new();
 
 /**
  * @brief free an active entity
  * @param self the entity to free
  */
-void    gf3d_entity_free(Entity *self);
+void gf3d_entity_free(Entity *self);
 
+
+void gf3d_entity_rotate(Entity *self, float degrees, Vector3D axis);
+
+void gf3d_entity_translate(Entity *self, Vector3D move);
 
 #endif
