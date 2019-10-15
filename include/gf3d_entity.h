@@ -21,18 +21,14 @@ typedef struct Entity_S
     Vector3D       rotation;       /**<yaw, pitch, and roll of the entity*/
     Vector3D       scale;          /**<*please default to 1,1,1*/
     EntityState    state;          /**<current state of the entity*/
-    //void (think*)(struct Entity_S* self);   /**<function called on entity think*/
-    //void (update*)(struct Entity_S* self);   /**<function called on entity update*/
-    //void (touch*)(struct Entity_S* self, struct Entity_S* other);   /**<function called on entity think*/
-    float           health;
-    float           healthmax;
-    float           armor;
-    float           experience;
-    float           level;
-    float           otherStuff;
+    void (*think) (struct Entity_S* self);   /**<function called on entity think*/
+    void (*update)(struct Entity_S* self);   /**<function called on entity update*/
+    void (*touch) (struct Entity_S* self, struct Entity_S* other);   /**<function called on entity touch*/
     void *data;                     /**<additional entity specific data*/
     
 }Entity;
+
+void gf3d_entity_manager_close();
 
 /**
  * @brief initializes the entity subsystem
@@ -54,6 +50,13 @@ void gf3d_entity_manager_init(Uint32 entity_max);
 void gf3d_entity_manager_draw_all(Uint32 bufferFrame, VkCommandBuffer commandBuffer);
 
 Entity *gf3d_entity_new();
+
+/**
+ * @brief set entity variables to defaults
+ * @param entity entity to initialize
+ * @param model model to load
+ */
+void gf3d_entity_init(Entity *entity, char model[]);
 
 /**
  * @brief free an active entity

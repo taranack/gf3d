@@ -1,0 +1,22 @@
+#ifndef GF3D_GF3D_GRID_H
+#define GF3D_GF3D_GRID_H
+
+#define X 10
+#define Y 10
+
+#include "gf3d_entity.h"
+
+typedef struct TILE_S
+{
+    Uint8          hasEntity;      /**<flag to keep track if this isntance has an entity in it*/
+    Entity          *entity;       /**<the entity in the grid NULL if no entity is present*/
+    Uint8          inBounds;      /**<flag to keep track if this isntance is in-bounds*/
+    Uint8          team;          /**<flag to keep track which team the grid is on*/
+    void *data;                    /**<additional entity specific data*/
+}Tile;
+
+void gf3d_grid_manager_close();
+
+void gf3d_grid_manager_init();
+
+#endif //GF3D_GF3D_GRID_H

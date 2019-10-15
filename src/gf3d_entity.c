@@ -49,6 +49,16 @@ Entity *gf3d_entity_new() {
     return NULL;
 }
 
+void gf3d_entity_init(Entity *entity, char model[]) {
+    entity->model = gf3d_model_load(model);
+    gfc_matrix_identity(entity->modelMat);
+    entity->position = vector3d(0,0,0);
+    entity->rotation = vector3d(0,0,0);
+    entity->scale = vector3d(1,1,1);
+}
+
+
+
 void gf3d_entity_free(Entity *self) {
     if (!self) {
         slog("self pointer is not valid");

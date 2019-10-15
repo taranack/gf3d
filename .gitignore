@@ -1,7 +1,7 @@
 # Prerequisites
 *.d
 
-#fuck clion
+# fuck clion
 build/
 .idea/
 cmake-build-debug/

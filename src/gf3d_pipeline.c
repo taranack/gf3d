@@ -460,7 +460,7 @@ void gf3d_pipeline_create_descriptor_sets(Pipeline *pipe)
     pipe->descriptorSets = (VkDescriptorSet **)gfc_allocate_array(sizeof(VkDescriptorSet*),gf3d_pipeline.chainLength);
 
     for (i = 0; i < gf3d_pipeline.chainLength; i++)
-    {    
+    {
         pipe->descriptorSets[i] = (VkDescriptorSet *)gfc_allocate_array(sizeof(VkDescriptorSet),pipe->descriptorSetCount);
         allocInfo.descriptorPool = pipe->descriptorPool[i];
         slog("allocating descriptor sets");
@@ -475,7 +475,6 @@ void gf3d_pipeline_create_descriptor_sets(Pipeline *pipe)
             return;
         }
     }
-    pipe->descriptorSetCount = gf3d_pipeline.chainLength;
 }
 
 void gf3d_pipeline_create_basic_model_descriptor_set_layout(Pipeline *pipe)
