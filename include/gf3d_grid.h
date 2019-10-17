@@ -15,8 +15,12 @@ typedef struct TILE_S
     void *data;                    /**<additional entity specific data*/
 }Tile;
 
-void gf3d_grid_manager_close();
-
 void gf3d_grid_manager_init();
+
+void gf3d_grid_set_entity(int x, int y, Entity* entity);
+
+void gf3d_grid_move_entity(int x, int y, Entity* entity);
+
+void gf3d_grid_log_state();
 
 #endif //GF3D_GF3D_GRID_H

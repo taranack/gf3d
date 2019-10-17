@@ -51,24 +51,82 @@ int main(int argc,char *argv[])
     gf3d_entity_rotate(vulture, M_PI/2, vector3d(1,0,0));
     gf3d_entity_rotate(vulture, M_PI, vector3d(0,1,0));
 
-    int i;
-    int j;
-    Entity *cubes[3][3];
-    for(i = 0; i < 3; i++){
-        for(j = 0; j < 3; j++){
-            cubes[i][j] = gf3d_entity_new();
-            gf3d_entity_init(cubes[i][j], "cube");
-            gf3d_entity_translate(cubes[i][j], vector3d(i, j, 0));
-        }
+    int teamSize = 3;
+
+    Entity *team[teamSize];
+
+    //Team cubington
+    for(int i = 0; i < teamSize; i++){
+        team[i] = gf3d_entity_new();
+        gf3d_entity_init(team[i], "cube");
+        gf3d_grid_set_entity(i, i, team[i]);
     }
 
+    int curEntity = 0;
+    Entity *activeEntity = team[curEntity];
+
+    int cycleTimer = 0;
+    Uint8 startCycle = false;
     while(!done)
     {
         SDL_PumpEvents();   // update SDL's internal event structures
         keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
         //update game things here
 
-        gf3d_entity_rotate(vulture, .002, vector3d(0,1,0));
+        //Inputs
+        if(keys[SDL_SCANCODE_LEFT])gf3d_vgraphics_rotate_camera(0.002);
+        if(keys[SDL_SCANCODE_RIGHT])gf3d_vgraphics_rotate_camera(-0.002);
+
+        if(keys[SDL_SCANCODE_GRAVE])gf3d_grid_log_state();
+
+        if(keys[SDL_SCANCODE_SPACE]){
+            for(int i = 0; i < teamSize; i++){
+                team[i]->hasMove = true;
+            }
+        }
+
+        if(startCycle){
+            cycleTimer++;
+            if(cycleTimer >= 300){
+                cycleTimer = 0;
+                startCycle = false;
+            }
+        }
+
+        if(keys[SDL_SCANCODE_TAB]){
+            if(!startCycle){
+                startCycle = true;
+                curEntity++;
+                if(curEntity == teamSize){
+                    curEntity = 0;
+                }
+                activeEntity = team[curEntity];
+                slog("current entity is %i", curEntity);
+            }
+        }
+
+        if(activeEntity->hasMove){
+            if(keys[SDL_SCANCODE_A]){
+                gf3d_grid_move_entity(-1, 0, activeEntity);
+                activeEntity->hasMove = false;
+                gf3d_grid_log_state();
+            }
+            if(keys[SDL_SCANCODE_D]){
+                gf3d_grid_move_entity(1, 0, activeEntity);
+                activeEntity->hasMove = false;
+                gf3d_grid_log_state();
+            }
+            if(keys[SDL_SCANCODE_W]){
+                gf3d_grid_move_entity(0, 1, activeEntity);
+                activeEntity->hasMove = false;
+                gf3d_grid_log_state();
+            }
+            if(keys[SDL_SCANCODE_S]){
+                gf3d_grid_move_entity(0, -1, activeEntity);
+                activeEntity->hasMove = true;
+                gf3d_grid_log_state();
+            }
+        }
 
         // configure render command for graphics command pool
         // for each mesh, get a command and configure it from the pool
