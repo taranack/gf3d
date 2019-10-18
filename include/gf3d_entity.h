@@ -70,4 +70,6 @@ void gf3d_entity_translate(Entity *self, Vector3D move);
 
 void gf3d_entity_make_translation(Entity *self, Vector3D move);
 
+void gf3d_entity_change_model(Entity *entity, char model[]);
+
 #endif

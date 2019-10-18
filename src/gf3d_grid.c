@@ -33,6 +33,10 @@ void gf3d_grid_manager_init() {
     }
 }
 
+Tile* gf3d_grid_get_tile(int x, int y){
+    return gf3d_grid_manager.tile_list[x][y];
+}
+
 void gf3d_grid_set_entity(int x, int y, Entity* entity) {
     gf3d_grid_manager.tile_list[x][y]->entity = entity;
     gf3d_grid_manager.tile_list[x][y]->hasEntity = true;

@@ -57,6 +57,11 @@ void gf3d_entity_init(Entity *entity, char model[]) {
 }
 
 
+void gf3d_entity_change_model(Entity *entity, char model[]){
+    entity->model = gf3d_model_load(model);
+}
+
+
 
 void gf3d_entity_free(Entity *self) {
     if (!self) {
