@@ -107,7 +107,7 @@ void gf3d_vgraphics_init(
     gfc_matrix_identity(gf3d_vgraphics.ubo.proj);
     gfc_matrix_view(
         gf3d_vgraphics.ubo.view,
-        vector3d(0,30,10),
+        vector3d(20,0,10),
         vector3d(0,0,0),
         vector3d(0,0,1)
     );

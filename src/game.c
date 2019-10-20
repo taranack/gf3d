@@ -43,7 +43,6 @@ int main(int argc,char *argv[])
     gf3d_entity_manager_init(128);
     gf3d_grid_manager_init();
 
-
     Entity *floor[X][Y];
     for(int i = 0; i < X; i++){
         for(int j = 0; j < Y; j++){
@@ -53,7 +52,7 @@ int main(int argc,char *argv[])
             }else{
                 gf3d_entity_init(floor[i][j], "planered");
             }
-            gf3d_grid_move_entity(i, j, floor[i][j]);
+            gf3d_entity_make_translation(floor[i][j], vector3d(i-X/2, j-Y/2, 0));
             gf3d_entity_rotate(floor[i][j], 3*M_PI/2, vector3d(0,1,0));
 
         }
@@ -74,7 +73,8 @@ int main(int argc,char *argv[])
     for(int i = 0; i < teamSize; i++){
         team[i] = gf3d_entity_new();
         gf3d_entity_init(team[i], "testmonkey");
-        gf3d_grid_set_entity(i, i, team[i]);
+        gf3d_grid_init_entity_position(i, i, team[i]);
+
     }
 
     int curEntity = 0;
@@ -95,7 +95,7 @@ int main(int argc,char *argv[])
         keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
         //update game things here
 
-        gf3d_entity_make_translation(highlight, vector3d(activeEntity->x, activeEntity->y, 0));
+        gf3d_entity_make_translation(highlight, vector3d(activeEntity->x - X/2, activeEntity->y - Y/2, 0));
 
         //Inputs
         if(keys[SDL_SCANCODE_LEFT])gf3d_vgraphics_rotate_camera(0.002);

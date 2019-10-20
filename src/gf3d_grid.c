@@ -54,19 +54,24 @@ int onGrid(int x, int y){
     return (x > -1 && x < X) && (y > -1 && y < Y);
 }
 
+void gf3d_grid_init_entity_position(int x, int y, Entity* entity){
+    gf3d_entity_make_translation(entity, vector3d((entity->x-X/2), (entity->y-Y/2), 0));
+    gf3d_grid_set_entity(x, y, entity);
+}
+
 void gf3d_grid_move_entity(int x, int y, Entity* entity) {
     int curX = entity->x;
     int curY = entity->y;
 
     int nextX = curX+x;
     int nextY = curY+y;
-    if(!onGrid(nextX, nextY)){
+    if(!onGrid(nextX, nextY) || gf3d_grid_manager.tile_list[nextX][nextY]->hasEntity){
         return;
     }
 
     gf3d_grid_clear_entity(curX, curY);
     gf3d_grid_set_entity(nextX, nextY, entity);
-    gf3d_entity_make_translation(entity, vector3d(nextX, nextY, 0));
+    gf3d_entity_make_translation(entity, vector3d((nextX-X/2), (nextY-Y/2), 0));
 }
 
 void gf3d_grid_log_state(){
