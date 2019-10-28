@@ -74,12 +74,12 @@ void gf3d_entity_free(Entity *self) {
 
 //Entity specific methods
 
-void gf3d_entity_rotate(Entity *self, float degrees, Vector3D axis) {
-    gfc_matrix_rotate(self->modelMat, self->modelMat, degrees, axis);
+void gf3d_entity_set_team(Entity *entity, Team team){
+    entity->team = team;
 }
 
-void gf3d_entity_translate(Entity *self, Vector3D move) {
-    gfc_matrix_translate(self->modelMat, move);
+void gf3d_entity_rotate(Entity *self, float degrees, Vector3D axis) {
+    gfc_matrix_rotate(self->modelMat, self->modelMat, degrees, axis);
 }
 
 void gf3d_entity_make_translation(Entity *self, Vector3D move) {

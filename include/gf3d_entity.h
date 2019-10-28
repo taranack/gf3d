@@ -5,25 +5,36 @@
 
 typedef enum
 {
-    ES_Idle = 0,
-    ES_Spiking = 1,
-    ES_Blocking = 2,
-    ES_Setting = 3
-}EntityState;
+    Idle = 0,
+    Spiking = 1,
+    Blocking = 2,
+    Setting = 3,
+    Recieving = 4,
+    Serving = 5
+}ActionState;
+
+typedef enum
+{
+    Home = 0,
+    Away = 1
+}Team;
+
+typedef struct Location_S
+{
+    int x;
+    int y;
+}Location;
 
 typedef struct Entity_S
 {
     Uint8           _inuse;         /**<flag to keep track if this isntance is in use and should not be reassigned*/
     Model          *model;          /**<the 3d model for this entity*/
     Matrix4        modelMat;        /**<the model matrix for this entity*/
-    int            x;               /**<x position in the grid*/
-    int            y;               /**<y position in the grid*/
+    Team           team;
+    Location       loc;             /**<player location*/
+    Location       target;
     Uint8          hasMove;         /**<whether or not the entity has used it's turn*/
-    Vector3D       position;        /**<position of the entity in 3d space*/
-    EntityState    state;           /**<current state of the entity*/
-    void (*think) (struct Entity_S* self);   /**<function called on entity think*/
-    void (*update)(struct Entity_S* self);   /**<function called on entity update*/
-    void (*touch) (struct Entity_S* self, struct Entity_S* other);   /**<function called on entity touch*/
+    ActionState    action;           /**<current state of the entity*/
     void *data;                     /**<additional entity specific data*/
 }Entity;
 
@@ -66,10 +77,10 @@ void gf3d_entity_free(Entity *self);
 
 void gf3d_entity_rotate(Entity *self, float degrees, Vector3D axis);
 
-void gf3d_entity_translate(Entity *self, Vector3D move);
-
 void gf3d_entity_make_translation(Entity *self, Vector3D move);
 
 void gf3d_entity_change_model(Entity *entity, char model[]);
+
+void gf3d_entity_set_team(Entity *entity, Team team);
 
 #endif
