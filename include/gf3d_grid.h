@@ -1,10 +1,7 @@
 #ifndef GF3D_GF3D_GRID_H
 #define GF3D_GF3D_GRID_H
 
-#define X 17
-#define Y 16
-
-#include "gf3d_entity.h"
+#include "gf3d_ball.h"
 
 typedef struct TILE_S
 {
@@ -24,6 +21,10 @@ void gf3d_grid_init_entity_position(int x, int y, Entity* entity);
 void gf3d_grid_set_entity(int x, int y, Entity* entity);
 
 void gf3d_grid_move_entity(int x, int y, Entity* entity);
+
+void gf3d_grid_move_to_next_loc(Entity* entity);
+
+void gf3d_grid_prep_move(int x, int y, Entity* entity);
 
 void gf3d_grid_log_state();
 

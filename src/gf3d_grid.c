@@ -45,6 +45,9 @@ void gf3d_grid_set_entity(int x, int y, Entity* entity) {
 
     entity->loc.x = x;
     entity->loc.y = y;
+
+    entity->nextLoc.x = x;
+    entity->nextLoc.y = y;
 }
 
 void gf3d_grid_clear_entity(int x, int y){
@@ -61,6 +64,21 @@ void gf3d_grid_init_entity_position(int x, int y, Entity* entity){
     gf3d_grid_set_entity(x, y, entity);
 }
 
+void gf3d_grid_move_to_next_loc(Entity* entity){
+    int curX = entity->loc.x;
+    int curY = entity->loc.y;
+
+    int nextX = entity->nextLoc.x;
+    int nextY = entity->nextLoc.y;
+    if(!onGrid(nextX, nextY) || gf3d_grid_manager.tile_list[nextX][nextY]->hasEntity){
+        return;
+    }
+
+    gf3d_grid_clear_entity(curX, curY);
+    gf3d_grid_set_entity(nextX, nextY, entity);
+    gf3d_entity_make_translation(entity, vector3d((nextX-X/2), (nextY-Y/2), 0));
+}
+
 void gf3d_grid_move_entity(int x, int y, Entity* entity) {
     int curX = entity->loc.x;
     int curY = entity->loc.y;
@@ -74,6 +92,21 @@ void gf3d_grid_move_entity(int x, int y, Entity* entity) {
     gf3d_grid_clear_entity(curX, curY);
     gf3d_grid_set_entity(nextX, nextY, entity);
     gf3d_entity_make_translation(entity, vector3d((nextX-X/2), (nextY-Y/2), 0));
+}
+
+void gf3d_grid_prep_move(int x, int y, Entity* entity){
+    entity->nextLoc.x += x;
+    entity->nextLoc.y += y;
+
+    int nextX = entity->nextLoc.x;
+    int nextY = entity->nextLoc.y;
+    if(!onGrid(nextX, nextY) || gf3d_grid_manager.tile_list[nextX][nextY]->hasEntity){
+        return;
+    }
+
+    entity->hasMove = false;
+
+    gfc_matrix_make_translation(entity->nextMoveMat, vector3d((nextX-X/2), (nextY-Y/2), 0));
 }
 
 void gf3d_grid_log_state(){

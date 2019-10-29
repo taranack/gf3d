@@ -15,7 +15,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/gfc/simple_json/include
         ${CMAKE_SOURCE_DIR}/gfc/simple_logger/include
         ${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS})
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} include/gf3d_grid.h src/gf3d_grid.c)
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} include/gf3d_grid.h src/gf3d_grid.c include/gf3d_map.h include/gf3d_ball.h src/gf3d_ball.c src/gf3d_action.c include/gf3d_action.h)
 
 target_link_libraries(${PROJECT_NAME} SDL2_image png jpeg z vulkan m
 

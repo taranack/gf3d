@@ -62,18 +62,18 @@ int main(int argc, char *argv[]) {
     }
 
 
-    Model* net;
+    Model *net;
     Matrix4 netMat;
     net = gf3d_model_load("net");
     gfc_matrix_identity(netMat);
-    gfc_matrix_rotate(netMat, netMat, M_PI/2, vector3d(1, 0, 0));
-    gfc_matrix_rotate(netMat, netMat, M_PI/2, vector3d(0, 1, 0));
+    gfc_matrix_rotate(netMat, netMat, M_PI / 2, vector3d(1, 0, 0));
+    gfc_matrix_rotate(netMat, netMat, M_PI / 2, vector3d(0, 1, 0));
 
 
     int teamSize = 6;
     Location homeSpawns[teamSize];
     homeSpawns[0].x = 6;
-    homeSpawns[0].y = 4;
+    homeSpawns[0].y = 2;
 
     homeSpawns[1].x = 8;
     homeSpawns[1].y = 4;
@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
     //Team monkey
     for (int i = 0; i < teamSize; i++) {
         homeTeam[i] = gf3d_entity_new();
-        gf3d_entity_init(homeTeam[i], "testmonkey");
+        gf3d_entity_init(homeTeam[i], "testmonkey", "testmonkeyexhausted");
         gf3d_entity_set_team(homeTeam[i], Home);
         gf3d_grid_init_entity_position(homeSpawns[i].y, homeSpawns[i].x, homeTeam[i]);
         gf3d_grid_move_entity(-1, 0, homeTeam[i]);
@@ -125,7 +125,7 @@ int main(int argc, char *argv[]) {
     //Team bevelled cube
     for (int i = 0; i < teamSize; i++) {
         awayTeam[i] = gf3d_entity_new();
-        gf3d_entity_init(awayTeam[i], "bevel");
+        gf3d_entity_init(awayTeam[i], "bevel", "bevelexhausted");
         gf3d_entity_set_team(awayTeam[i], Away);
         gf3d_grid_init_entity_position(awaySpawns[i].y, awaySpawns[i].x, awayTeam[i]);
         gf3d_grid_move_entity(-1, 0, awayTeam[i]);
@@ -145,6 +145,10 @@ int main(int argc, char *argv[]) {
     int cycleTimer = 0;
     Uint8 startCycle = false;
 
+    gf3d_ball_init();
+    gf3d_action_init();
+
+
     // main game loop
     slog("gf3d main loop begin");
     while (!done) {
@@ -152,11 +156,12 @@ int main(int argc, char *argv[]) {
         keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
         //update game things here
 
-        gfc_matrix_make_translation(highlightMatrix,vector3d(activeEntity->loc.x - X / 2, activeEntity->loc.y - Y / 2, 0));
+        gfc_matrix_make_translation(highlightMatrix,
+                                    vector3d(activeEntity->loc.x - X / 2, activeEntity->loc.y - Y / 2, 0));
 
         //Inputs
-        if (keys[SDL_SCANCODE_LEFT])gf3d_vgraphics_rotate_camera(0.002);
-        if (keys[SDL_SCANCODE_RIGHT])gf3d_vgraphics_rotate_camera(-0.002);
+        if (keys[SDL_SCANCODE_LEFT])gf3d_vgraphics_rotate_camera(0.004);
+        if (keys[SDL_SCANCODE_RIGHT])gf3d_vgraphics_rotate_camera(-0.004);
 
         if (keys[SDL_SCANCODE_GRAVE])gf3d_grid_log_state();
 
@@ -176,6 +181,7 @@ int main(int argc, char *argv[]) {
                     curEntity = 0;
                 }
                 activeEntity = activeTeam[curEntity];
+                gf3d_action_swap_action(activeEntity->action);
                 slog("current entity is %i", curEntity);
             }
         }
@@ -183,54 +189,52 @@ int main(int argc, char *argv[]) {
         if (keys[SDL_SCANCODE_SPACE]) {
             if (!startCycle) {
                 startCycle = true;
-                for (int i = 0; i < teamSize; i++) {
-                    homeTeam[i]->hasMove = true;
-                    awayTeam[i]->hasMove = true;
-                    gf3d_entity_change_model(homeTeam[i], "testmonkey");
-                    gf3d_entity_change_model(awayTeam[i], "bevel");
-                }
                 if (curTeam == Home) {
                     curTeam = Away;
                     activeTeam = awayTeam;
                     activeEntity = awayTeam[0];
+                    gf3d_action_swap_action(activeEntity->action);
                 } else {
                     curTeam = Home;
                     activeTeam = homeTeam;
                     activeEntity = homeTeam[0];
+                    gf3d_action_swap_action(activeEntity->action);
+                    gf3d_entity_manager_turn_pass();
                 }
             }
         }
 
         if (activeEntity->hasMove) {
+            int mult = -1;
+            if(curTeam == Home){
+                mult = 1;
+            }
             if (keys[SDL_SCANCODE_A]) {
-                gf3d_grid_move_entity(-1, 0, activeEntity);
-                activeEntity->hasMove = false;
-                gf3d_entity_change_model(activeEntity, "testmonkeyexhausted");
-                gf3d_grid_log_state();
+                gf3d_grid_prep_move(0, 1 * mult, activeEntity);
             }
 
             if (keys[SDL_SCANCODE_D]) {
-                gf3d_grid_move_entity(1, 0, activeEntity);
-                activeEntity->hasMove = false;
-                gf3d_entity_change_model(activeEntity, "testmonkeyexhausted");
-                gf3d_grid_log_state();
+                gf3d_grid_prep_move(0, -1 * mult, activeEntity);
+
             }
 
             if (keys[SDL_SCANCODE_W]) {
-                gf3d_grid_move_entity(0, 1, activeEntity);
-                activeEntity->hasMove = false;
-                gf3d_entity_change_model(activeEntity, "testmonkeyexhausted");
-                gf3d_grid_log_state();
+                gf3d_grid_prep_move(1 * mult, 0, activeEntity);
+
             }
 
             if (keys[SDL_SCANCODE_S]) {
-                gf3d_grid_move_entity(0, -1, activeEntity);
-                activeEntity->hasMove = false;
-                gf3d_entity_change_model(activeEntity, "testmonkeyexhausted");
-                gf3d_grid_log_state();
+                gf3d_grid_prep_move(-1 * mult, 0, activeEntity);
             }
-
         }
+
+        if(keys[SDL_SCANCODE_1])gf3d_entity_choose_action(activeEntity, Idle);
+        if(keys[SDL_SCANCODE_2])gf3d_entity_choose_action(activeEntity, Spiking);
+        if(keys[SDL_SCANCODE_3])gf3d_entity_choose_action(activeEntity, Blocking);
+        if(keys[SDL_SCANCODE_4])gf3d_entity_choose_action(activeEntity, Setting);
+        if(keys[SDL_SCANCODE_5])gf3d_entity_choose_action(activeEntity, Receiving);
+        if(keys[SDL_SCANCODE_6])gf3d_entity_choose_action(activeEntity, Serving);
+
 
         // configure render command for graphics command pool
         // for each mesh, get a command and configure it from the pool
@@ -238,14 +242,19 @@ int main(int argc, char *argv[]) {
         gf3d_pipeline_reset_frame(gf3d_vgraphics_get_graphics_pipeline(), bufferFrame);
         commandBuffer = gf3d_command_rendering_begin(bufferFrame);
 
+
+
         for (int i = 0; i < Y; i++) {
             for (int j = 0; j < X; j++) {
                 gf3d_model_draw(floorModels[i][j], bufferFrame, commandBuffer, floorMatrices[i][j]);
             }
         }
+
+        gf3d_ball_draw(bufferFrame, commandBuffer);
         gf3d_model_draw(highlight, bufferFrame, commandBuffer, highlightMatrix);
         gf3d_entity_manager_draw_all(bufferFrame, commandBuffer);
-        //Draw the net last!!!
+        //Draw the net after the players!!!
+        gf3d_action_draw(bufferFrame, commandBuffer);
         gf3d_model_draw(net, bufferFrame, commandBuffer, netMat);
 
 
