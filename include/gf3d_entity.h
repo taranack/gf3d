@@ -9,7 +9,7 @@ typedef enum
     Spiking = 1,
     Blocking = 2,
     Setting = 3,
-    Recieving = 4,
+    Receiving = 4,
     Serving = 5
 }ActionState;
 
@@ -32,7 +32,9 @@ typedef struct Entity_S
     Matrix4        modelMat;        /**<the model matrix for this entity*/
     Team           team;
     Location       loc;             /**<player location*/
-    Location       target;
+    Location       nextLoc;         /**<player's move for the next turn*/
+    Location       target;          /**<player's action target*/
+    int            preparation;
     Uint8          hasMove;         /**<whether or not the entity has used it's turn*/
     ActionState    action;           /**<current state of the entity*/
     void *data;                     /**<additional entity specific data*/
