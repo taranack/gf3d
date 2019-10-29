@@ -40,6 +40,7 @@ int main(int argc, char *argv[]) {
     gf3d_entity_manager_init(256);
     gf3d_grid_manager_init();
 
+    //Creating the floor
     Model *floorModels[Y][X];
     Matrix4 floorMatrices[Y][X];
     for (int i = 0; i < Y; i++) {
@@ -156,8 +157,7 @@ int main(int argc, char *argv[]) {
         keys = SDL_GetKeyboardState(NULL); // get the keyboard state for this frame
         //update game things here
 
-        gfc_matrix_make_translation(highlightMatrix,
-                                    vector3d(activeEntity->loc.x - X / 2, activeEntity->loc.y - Y / 2, 0));
+        gfc_matrix_make_translation(highlightMatrix,vector3d(activeEntity->loc.x - X / 2, activeEntity->loc.y - Y / 2, 0));
 
         //Inputs
         if (keys[SDL_SCANCODE_LEFT])gf3d_vgraphics_rotate_camera(0.004);
