@@ -112,10 +112,10 @@ int main(int argc, char *argv[]) {
     Entity *homeTeam[teamSize];
     Entity *awayTeam[teamSize];
 
-    //Team monkey
+    //Team people
     for (int i = 0; i < teamSize; i++) {
         homeTeam[i] = gf3d_entity_new();
-        gf3d_entity_init(homeTeam[i], "testmonkey", "testmonkeyexhausted");
+        gf3d_entity_init(homeTeam[i], "man", "manexhausted");
         gf3d_entity_set_team(homeTeam[i], Home);
         gf3d_grid_init_entity_position(homeSpawns[i].y, homeSpawns[i].x, homeTeam[i]);
         gf3d_grid_move_entity(-1, 0, homeTeam[i]);
@@ -200,6 +200,7 @@ int main(int argc, char *argv[]) {
                     activeEntity = homeTeam[0];
                     gf3d_action_swap_action(activeEntity->action);
                     gf3d_entity_manager_turn_pass();
+                    gf3d_ball_update();
                 }
             }
         }

@@ -17,6 +17,13 @@ typedef struct Ball_S
 
 void gf3d_ball_init();
 
+Location gf3d_ball_get_loc();
+
 void gf3d_ball_draw(Uint32 bufferFrame, VkCommandBuffer commandBuffer);
+
+void gf3d_ball_update();
+
+//Actions on the ball
+void gf3d_ball_serve();
 
 #endif //GF3D_GF3D_BALL_H

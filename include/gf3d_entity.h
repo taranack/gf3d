@@ -82,4 +82,6 @@ void gf3d_entity_set_team(Entity *entity, Team team);
 
 void gf3d_entity_choose_action(Entity *entity, ActionState action);
 
+Uint8 gf3d_location_compare(Location A, Location B);
+
 #endif

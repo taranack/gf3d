@@ -86,6 +86,31 @@ void gf3d_entity_manager_turn_pass(){
         gf3d_grid_move_to_next_loc(&gf3d_entity_manager.entity_list[i]);
         gf3d_entity_manager.entity_list[i].nextLoc = gf3d_entity_manager.entity_list[i].loc;
         gf3d_entity_manager.entity_list[i].hasMove = true;
+
+        switch (gf3d_entity_manager.entity_list[i].action)
+        {
+            case Idle:
+                break;
+            case Spiking:
+
+                break;
+            case Setting:
+
+                break;
+            case Receiving:
+
+                break;
+            case Serving:
+                if(gf3d_location_compare(gf3d_ball_get_loc(), gf3d_entity_manager.entity_list[i].loc)){
+                    //hit that ball!
+                    slog("The ball has been served!");
+                    gf3d_ball_serve();
+                }
+                break;
+            case Blocking:
+
+                break;
+        }
     }
 }
 
@@ -109,5 +134,10 @@ void gf3d_entity_choose_action(Entity *entity, ActionState action){
     entity->action = action;
     gf3d_action_swap_action(action);
 }
+
+Uint8 gf3d_location_compare(Location A, Location B) {
+    return A.x == B.x && A.y == B.y;
+}
+
 
 /*eol@eof*/
