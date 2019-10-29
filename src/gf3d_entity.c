@@ -92,13 +92,23 @@ void gf3d_entity_manager_turn_pass(){
             case Idle:
                 break;
             case Spiking:
-
+                if(gf3d_location_compare(gf3d_ball_get_loc(), gf3d_entity_manager.entity_list[i].loc)){
+                    slog("The ball has been spiked!");
+                    gf3d_ball_spike();
+                }
+                break;
                 break;
             case Setting:
-
+                if(gf3d_location_compare(gf3d_ball_get_loc(), gf3d_entity_manager.entity_list[i].loc)){
+                    slog("The ball has been set!");
+                    gf3d_ball_set();
+                }
                 break;
             case Receiving:
-
+                if(gf3d_location_compare(gf3d_ball_get_loc(), gf3d_entity_manager.entity_list[i].loc)){
+                    slog("The ball has been received!");
+                    gf3d_ball_receive();
+                }
                 break;
             case Serving:
                 if(gf3d_location_compare(gf3d_ball_get_loc(), gf3d_entity_manager.entity_list[i].loc)){

@@ -201,6 +201,7 @@ int main(int argc, char *argv[]) {
                     gf3d_action_swap_action(activeEntity->action);
                     gf3d_entity_manager_turn_pass();
                     gf3d_ball_update();
+
                 }
             }
         }
